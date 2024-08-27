@@ -1,0 +1,5 @@
+1. \bword\b /i (word boundaries)
+2. \bi\b /g (selecciona todas las apariciones de i)
+3. (?![AEIOU])A-Z /g (Todas las consonantes mayusculas)
+4. \d+ /g (todos los numeros enteros)
+5. \s{4,} /g (Find all occurrences of 4 or more whitespace characters in a row throughout the string.)
