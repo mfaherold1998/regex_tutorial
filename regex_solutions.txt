@@ -1,3 +1,5 @@
+https://regex101.com/quiz/1
+
 1. \bword\b /i (word boundaries)
 2. \bi\b /g (selecciona todas las apariciones de i)
 3. (?![AEIOU])A-Z /g (Todas las consonantes mayusculas)
