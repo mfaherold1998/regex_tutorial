@@ -5,3 +5,5 @@ https://regex101.com/quiz/1
 3. (?![AEIOU])A-Z /g (Todas las consonantes mayusculas)
 4. \d+ /g (todos los numeros enteros)
 5. \s{4,} /g (Find all occurrences of 4 or more whitespace characters in a row throughout the string.)
+6. (.)\1{2,2} /g $1 (encontrar todos los caracteres que se repiten usando backreferences y remplazar todas sus ocurrencias por una sola)
+7. ^(?:(?:25[0-5]|(?:2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$ (validar Ipv4)

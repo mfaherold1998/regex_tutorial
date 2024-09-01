@@ -218,6 +218,30 @@ If you do not need the group to capture its match, you can optimize this regular
 
 Backreferences match the same text as previously matched by a capturing group
 
-<([A-Z][A-Z0-9]*)\b[^>]*>.*?</\1><span style="background-color: yellow; color: black;">texto con fondo amarillo</span>
+<([A-Z][A-Z0-9]*)\b[^>]*>.*?</\1> => This regex contains only one pair of parentheses, which capture the string matched by [A-Z][A-Z0-9]*. This is the opening HTML tag. (Since HTML tags are case insensitive, this regex requires case insensitive matching.) The backreference \1 (backslash one) references the first capturing group. \1 matches the exact same text that was matched by the first capturing group. The / before it is a literal character. It is simply the forward slash in the closing HTML tag that we are trying to match.
+
+([a-c])x\1x\1 => matches axaxa, bxbxb and cxcxc
+
+There is a clear difference between ([abc]+) and ([abc])+. Though both successfully match cab, the first regex will put cab into the first backreference, while the second regex will only store b. That is because in the second regex, the plus caused the pair of parentheses to repeat three times. The first time, c was stored. The second time, a, and the third time b. Each time, the previous value was overwritten, so b remains.
+
+When editing text, doubled words such as “the the” easily creep in. Using the regex \b(\w+)\s+\1\b in your text editor, you can easily find them. To delete the second word, simply type in \1 as the replacement text and click the Replace button.
+
+> Parentheses and Backreferences Cannot Be Used Inside Character Classes
+
+## Forward references
+
+(\2two|(one))+ => matches oneonetwo
+
+## Nested References
+
+A nested reference is a backreference inside the capturing group that it references
+
+## Named Capturing Groups and Backreferences
+
+(?P<name>group) => named group
+
+(?P=name) => backreferences of a named group
+
+Example => <(?P<tag>[A-Z][A-Z0-9]*)\b[^>]*>.*?</(?P=tag)>
 
 
