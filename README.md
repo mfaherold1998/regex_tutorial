@@ -244,4 +244,31 @@ A nested reference is a backreference inside the capturing group that it referen
 
 Example => <(?P<tag>[A-Z][A-Z0-9]*)\b[^>]*>.*?</(?P=tag)>
 
+# Diagrama de Clases en Mermaid
+
+```mermaid
+classDiagram
+    class Persona {
+        +String nombre
+        +String apellidos
+        +int edad
+        +String getNombre()
+        +String getApellidos()
+        +int getEdad()
+    }
+
+    class Estudiante {
+        +String matricula
+        +void estudiar()
+    }
+
+    class Profesor {
+        +String especialidad
+        +void ensenar()
+    }
+
+    Persona <|-- Estudiante
+    Persona <|-- Profesor
+
+
 
