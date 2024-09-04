@@ -244,5 +244,73 @@ A nested reference is a backreference inside the capturing group that it referen
 
 Example => <(?P<tag>[A-Z][A-Z0-9]*)\b[^>]*>.*?</(?P=tag)>
 
+## Relative Backreferences
+
+(a)(b)(c)\k<-1> => matches abcc
+
+(a)(b)(c)\k<-3> => matches abca
+
+>If the backreference is inside a capturing group, then you also need to count that capturing group’s opening parenthesis.
+
+(a)(b)(c\k<-2>) => matches abcb
+
+## Branch Reset Group
+
+Dentro de un "Branch Reset Group", las alternativas se agrupan en un solo conjunto de capturas. Esto significa que si pattern1 captura algo, será almacenado en el grupo de captura 1, pero si pattern2 captura algo en la misma posición del patrón, también será almacenado en el grupo 1.
+
+En una regex normal sin "Branch Reset Group", las alternativas (a)|(b) corresponderían a dos grupos de captura diferentes (1 para a y 2 para b). Con el "Branch Reset Group", las alternativas comparten los mismos números de grupo.
+
+The syntax is **(?|regex)**
+
+If you don’t use any alternation or capturing groups inside the branch reset group, then its special function doesn’t come into play.
+
+(?|(a)|(b)|(c))\1 => matches aa, bb, or cc.
+
+The alternatives in the branch reset group don’t need to have the same number of capturing groups. (?|abc|(d)(e)(f)|g(h)i) has three capturing groups. When this regex matches abc, all three groups are empty. When def is matched, $1 holds d, $2 holds e and $3 holds f. When ghi is matched, $1 holds h while the other two are empty.
+
+You can have capturing groups before and after the branch reset group. Groups before the branch reset group are numbered as usual. Groups in the branch reset group are numbered continued from the groups before the branch reset group, which each alternative resetting the number. Groups after the branch reset group are numbered continued from the alternative with the most groups, even if that is not the last alternative. So (x)(?|abc|(d)(e)(f)|g(h)i)(y) defines five capturing groups. (x) is group 1, (d) and (h) are group 2, (e) is group 3, (f) is group 4, and (y) is group 5.
+
+## Named Capturing Groups in Branch Reset Groups
+
+(?'before'x)(?|abc|(?'left'd)(?'middle'e)(?'right'f)|g(?'left'h)i)(?'after'y)
+
+## Day and Month with Accurate Number of Days
+
+^(?:(0?[13578]|1[02])/(3[01]|[12][0-9]|0?[1-9]) # 31 days
+ |  (0?[469]|11)/(30|[12][0-9]|0?[1-9])         # 30 days
+ |  (0?2)/([12][0-9]|0?[1-9])                   # 29 days
+ )$
+
+ ^(?|(0?[13578]|1[02])/(3[01]|[12][0-9]|0?[1-9]) # 31 days
+ |  (0?[469]|11)/(30|[12][0-9]|0?[1-9])         # 30 days
+ |  (0?2)/([12][0-9]|0?[1-9])                   # 29 days
+ )$
+
+ The first version uses a non-capturing group (?:…) to group the alternatives. It has six separate capturing groups. $1 and $2 hold the month and the day for months with 31 days. $3 and $4 hold them for months with 30 days. $5 and $6 are only used for February.
+
+ The second version uses a branch reset group (?|…) to group the alternatives and merge their capturing groups. The 4th character is the only difference between these two regexes. Now there are only two capturing groups. These are shared between the three alternatives. When a match is found $1 always holds the month and 2 always holds the day, regardless of the number of days in the month.
+
+ ## Free-spacing mode
+
+ > The mode is usually enabled by setting an option or flag outside the regex. With flavors that support mode modifiers, you can put (?x) the very start of the regex
+
+In free-spacing mode, whitespace between regular expression tokens is ignored. Whitespace includes spaces, tabs, and line breaks. Note that only whitespace between tokens is ignored. a b c is the same as abc in free-spacing mode.
+
+But \ d and \d are not the same
+
+Likewise, grouping modifiers cannot be broken up. (?>atomic) is the same as (?> ato mic ) and as ( ?>ato mic).
+
+They’re not the same as (? >atomic). The latter is a syntax error. The ?> grouping modifier is a single element in the regex syntax, and must stay together.
+
+A character class is generally treated as a single token. [abc] is not the same as [ a b c ].
+
+In free-spacing mode, you can use \  or [ ] to match a single space.
+
+[ ^ a b c ] matches any of the characters ^, a, b, c or space
+
+In free-spacing mode is that the # character starts a comment.
+
+Many flavors also allow you to add comments to your regex without using free-spacing mode. The syntax is (?#comment) where “comment” can be whatever you want, as long as it does not contain a closing parenthesis. The regex engine ignores everything after the (?# until the first closing parenthesis.
+
 
 
