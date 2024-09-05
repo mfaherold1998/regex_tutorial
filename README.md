@@ -335,4 +335,34 @@ Unfortunately, à can also be encoded with the single Unicode code point U+00E0 
 
 ## Mode modifiers
 
+> https://www.regular-expressions.info/modifiers.html
+
+## Atomic Grouping
+
+> An atomic group is a group that, when the regex engine exits from it, automatically throws away all backtracking positions remembered by any tokens inside the group.
+>
+> Atomic groups are non-capturing
+>
+> The syntax is (?>group). Lookaround groups are also atomic.
+
+The regular expression a(bc|b)c (capturing group) matches abcc and abc. The regex a(?>bc|b)c (atomic group) matches abcc but not abc.
+
+## Optimization using atomic groups
+
+\b(?>integer|insert|in)\b => to try to match integers
+
+## Posesive Quantifiers
+
+Possessive quantifiers are a way to prevent the regex engine from trying all permutations. This is primarily useful for performance reasons. You can also use possessive quantifiers to eliminate certain matches.
+
+Like a greedy quantifier, a possessive quantifier repeats the token as many times as possible. Unlike a greedy quantifier, it does not give up matches as the engine backtracks. With a possessive quantifier, the deal is all or nothing.
+
+You can make a quantifier possessive by placing an extra + after it.
+
+* is greedy
+*? is lazy
+*+ is possessive
+++, ?+ and {n,m}+ are all possessive as well.
+
+
 
