@@ -313,4 +313,26 @@ In free-spacing mode is that the # character starts a comment.
 Many flavors also allow you to add comments to your regex without using free-spacing mode. The syntax is (?#comment) where “comment” can be whatever you want, as long as it does not contain a closing parenthesis. The regex engine ignores everything after the (?# until the first closing parenthesis.
 
 
+## Unicode Regular expresions
+
+A single Unicode code point => a single character
+
+The dot matches any single Unicode code point: à can be encoded as two code points U+0061 (a) and U+0300 (grave accent). '.' applied to à will match a without the accent.
+
+Unfortunately, à can also be encoded with the single Unicode code point U+00E0 (a with grave accent).
+
+## Matching unicode point
+
+\uFFFF => FFFF numero hexahesimal del code point
+
+\u00E0 => à when encoded as U+00E0
+
+> Otros lenguajes usan \x{}
+>
+> x{1234}{5678} will try to match code point U+1234 exactly 5678 times
+
+> More in https://www.regular-expressions.info/unicode.html
+
+## Mode modifiers
+
 
