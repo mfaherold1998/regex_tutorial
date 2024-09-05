@@ -9,3 +9,4 @@ https://regex101.com/quiz/1
 7. ^(?:(?:25[0-5]|(?:2[0-4]|1\d|[1-9]|)\d)\.?\b){4}$ (validar Ipv4)
 8. <?[^<>]*>|<[^>]* (match etiquetas HTML incluso parciales, o sea que le falta el > o el <)
 9. ^[^.\s@()<>,;:\\"[\]](?!.*\.\.)(?!.*-\.)[^@\s()<>,;:\\"[\]]+[^.\s@()<>,;:\\"[\]]@[^-.\s@](?!.*\.\.|.*-\.)[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9]+)*\.[a-zA-Z]{2,6}$ (emails)
+10.(.)(?=#) (coger un backreference de cualquier caracter antes de un # sin matchear el #)
