@@ -359,9 +359,12 @@ Like a greedy quantifier, a possessive quantifier repeats the token as many time
 
 You can make a quantifier possessive by placing an extra + after it.
 
-* is greedy
+'*' is greedy
+
 *? is lazy
+
 *+ is possessive
+
 ++, ?+ and {n,m}+ are all possessive as well.
 
 
