@@ -367,5 +367,5 @@ You can make a quantifier possessive by placing an extra + after it.
 
 ++, ?+ and {n,m}+ are all possessive as well.
 
-
+> The main practical benefit of possessive quantifiers is to speed up your regular expression.
 
