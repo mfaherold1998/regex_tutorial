@@ -419,3 +419,36 @@ Optimizing:
 
 \b(?=\w{6,12}\b)\w{0,9}(cat|dog|mouse)\w* => any word between 6 and 12 letters long containing either “cat”, “dog” or “mouse”
 
+## Keep The Text Matched So Far out of The Overall Regex Match
+
+\K keeps the text matched so far out of the overall regex match. h\Kd matches only the second d in adhd.
+
+You can use \K pretty much anywhere in any regular expression. You should only avoid using it inside lookbehind.
+
+You can have as many instances of \K in your regex as you like
+
+(ab\Kc|d\Ke)f => matches cf when preceded by ab. It also matches ef when preceded by d.
+
+\K does not affect capturing groups. When (ab\Kc|d\Ke)f matches cf, the capturing group captures abc as if the \K weren’t there. When the regex matches ef, the capturing group stores de.
+
+\K does not provide a way to negate anything
+
+## Conditionals if-else
+
+(?ifthen|else) => syntax
+
+For the if part, you can use the lookahead and lookbehind constructs. Using positive lookahead, the syntax becomes (?(?=regex)then|else). Because the lookahead has its own parentheses, the if and then parts are clearly separated.
+
+(?(?=condition)(then1|then2|then3)|(else1|else2|else3)) => to use alternation in then and else part
+
+(a)?b(?(1)c|d) => match bd and abc
+
+(?<test>a)?b(?(test)c|d) => same but using named capturing
+
+ **Example: extract email headers**
+
+ ^((From|To)|Subject): ((?(2)\w+@\w+\.[a-z]+|.+))
+
+ references: https://www.regular-expressions.info/conditional.html
+
+ 
