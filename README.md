@@ -369,3 +369,53 @@ You can make a quantifier possessive by placing an extra + after it.
 
 > The main practical benefit of possessive quantifiers is to speed up your regular expression.
 
+## Lookahead and Lookbehind
+
+> Are zero-length assertions just like the start and end of line, and start and end of word anchors
+> 
+> The difference is that lookaround actually matches characters, but then gives up the match, returning only the result: match or no match.
+
+## Negative lookahead
+
+Match something not followed by something else:
+
+q(?!u) => q not followed by u
+
+## Positive lookahead
+
+q(?=u) => matches a q that is followed by a u, without making the u part of the match
+
+You can use any regular expression inside the lookahead (but not lookbehind)
+
+The lookahead itself is not a capturing group
+
+If you want to store the match of the regex inside a lookahead, you have to put capturing parentheses around the regex inside the lookahead, like this: (?=(regex)).
+
+## Positive and Negative lookbehind
+
+(?<!a)b => matches a “b” that is not preceded by an “a”
+
+(?<=a)b => matches a “b” that is preceded by an “a”
+
+ \b\w+(?<!s)\b => a word non ending with an s (\b\w*[^s\W]\b)
+
+Most regex flavors do not allow you to use just any regex inside a lookbehind, because they cannot apply a regular expression backwards. You cannot use quantifiers or backreferences. You can use alternation, but only if all alternatives have the same length.
+
+## Lookaround is atomic
+
+The fact that lookaround is **zero-length** automatically makes it atomic
+
+## Double requirement regex
+
+(?=\b\w{6}\b)\b\w*cat\w*\b => match a word of 6 letter containing the substring cat. 
+
+Optimizing:
+
+(?=\b\w{6}\b)\w*cat\w* => remove \b\b en la segunda regex dado que son zero-lenght y el primer lookahead garantiza los limites de palabras.
+
+(?=\b\w{6}\b)\w{0,3}cat\w* => porque sabemos que antes de cat solo pueden venir 3 letras
+
+\b(?=\w{6}\b)\w{0,3}cat\w* => since it is zero-length itself, there’s no need to put it inside the lookahead
+
+\b(?=\w{6,12}\b)\w{0,9}(cat|dog|mouse)\w* => any word between 6 and 12 letters long containing either “cat”, “dog” or “mouse”
+
