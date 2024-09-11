@@ -14,3 +14,4 @@ https://regex101.com/quiz/1
 12. (?<!-)\b[+]?(?:100|[0-9]?[0-9])\b (match numeros enteros positivos del 1 al 100 en una string)
 13. \b[01]((?<=1)0|(?<=0)1)*\b (match cadenas de 0 y 1 alternados)
 14. ^(?=.*(?:http:\/\/|www\.|porn|credit card))(?!.*(?:not allowed|filter|mirc)) /i (hace dos pases por el texto, uno para controlar que las palabras deseadas existen y otro para controlar que las palabras no deseadas no existen)
+15. (?<!\d)\.(?!\s)|(?<=\d)\.(?!\d) (match los puntos que no se encuentran entre digitos)
