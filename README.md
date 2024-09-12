@@ -5,6 +5,10 @@
 2. [Special Characters](#Special-Characters)
 3. [Non-printable characters](#non-printable.characters)
 4. [Class Characteres](#class-characteres)
+5. [Shorthands character classes](#shorthands-character-classes)
+6. [Usos y mal usos del .](#mal-usos-.)
+7. [Start and end of a string](#start-end-string)
+8. [Alternation with The Vertical Bar or Pipe Symbol](#alternation)
 
 ## Introduction
 
