@@ -463,4 +463,42 @@ The name “subtract” must be the name of another group in the regex
 
 When the regex engine enters the balancing group, it subtracts one match from the group “subtract”. If the group “subtract” did not match yet, or if all its matches were already subtracted, then the balancing group fails to match.
 
+Example:
+
+Let’s apply the regex **(?'open'o)+(?'between-open'c)+** to the string **ooccc**.
+
+(?'open'o) matches the first o and stores that as the first capture of the group “open”. The quantifier + repeats the group. (?'open'o) matches the second o and stores that as the second capture. Repeating again, (?'open'o) fails to match the first c. But the + is satisfied with two repetitions.
+
+The regex engine advances to (?'between-open'c). Before the engine can enter this balancing group, it must check whether the subtracted group “open” has captured something. It has captured the second o. The engine enters the group, subtracting the most recent capture from “open”. This leaves the group “open” with the first o as its only capture. Now inside the balancing group, c matches c. The engine exits the balancing group. The group “between” captures the text between the match subtracted from “open” (the second o) and the c just matched by the balancing group. This is an empty string but it is captured anyway.
+
+The balancing group too has + as its quantifier. The engine again finds that the subtracted group “open” captured something, namely the first o. The regex enters the balancing group, leaving the group “open” without any matches. c matches the second c in the string. The group “between” captures oc which is the text between the match subtracted from “open” (the first o) and the second c just matched by the balancing group.
+
+The balancing group is repeated again. But this time, the regex engine finds that the group “open” has no matches left. The balancing group fails to match. The group “between” is unaffected, retaining its most recent capture.
+
+The + is satisfied with two iterations. The engine has reached the end of the regex. It returns oocc as the overall match. Match.Groups['open'].Success will return false, because all the captures of that group were subtracted. Match.Groups['between'].Value returns "oc".
+
+(?(open)(?!)) => a test to verify that open has no captures left
+
+^(?'open'o)+(?'-open'c)+(?(open)(?!))$ fails to match ooc.
+
+references: https://www.regular-expressions.info/balancing.html
+
+## Matching Palindromes
+
+^(?'letter'[a-z])+[a-z]?(?:\k'letter'(?'-letter'))+(?(letter)(?!))$ => matches palindrome words of any length.
+
+## Recursion
+
+(?R) | (?0) | \g<0> => sintaxis para la recursion
+
+a(?R)?z | a(?0)?z | a\g<0>?z => all match one or more letters a followed by exactly the same number of letters z
+
+The main purpose of recursion is to match balanced constructs or nested constructs. The generic regex is b(?:m|(?R))*e where b is what begins the construct, m is what can occur in the middle of the construct, and e is what can occur at the end of the construct.
+
+You can use an atomic group instead of the non-capturing group for improved performance: b(?>m|(?R))*e.
+
+\((?>[^()]|(?R))*\) matches a single pair of parentheses with any text in between, including an unlimited number of parentheses, as long as they are all properly paired.
+
+> Not all the flawors support recursion with alternation outside a gruop. The solution is put all alternations inside one.
+
 
