@@ -1,5 +1,13 @@
 # regex_tutorial
 
+## Table of content
+1. [Introduction](#Introduction)
+2. [Special Characters](#Special-Characters)
+3. [Non-printable characters](#non-printable.characters)
+4. [Class Characteres](#class-characteres)
+
+## Introduction
+
 word => La palabra word en caso sensitivo
 
 word /i => La palabra word en caso insensitivo
