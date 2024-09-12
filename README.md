@@ -451,4 +451,16 @@ For the if part, you can use the lookahead and lookbehind constructs. Using posi
 
  references: https://www.regular-expressions.info/conditional.html
 
- 
+ ## Balancing groups
+
+.Net special feature
+
+(?<capture-subtract>regex) or (?'capture-subtract'regex) => basic syntax of a balancing group
+
+(?<-subtract>regex) or (?'-subtract'regex) is the syntax for a non-capturing balancing group.
+
+The name “subtract” must be the name of another group in the regex
+
+When the regex engine enters the balancing group, it subtracts one match from the group “subtract”. If the group “subtract” did not match yet, or if all its matches were already subtracted, then the balancing group fails to match.
+
+
