@@ -11,7 +11,7 @@
 8. [Alternation with The Vertical Bar or Pipe Symbol](#alternation-with-the-vertical-bar-or-pipe-symbol)
 9. [Optional Items](#optional-items)
 10. [Limiting Repetition](#Limiting-Repetition)
-11. [Grouping and capturing](#Grouping-and- capturing)
+11. [Grouping and capturing](#Grouping-and-capturing)
 12. [Backreferences](#Backreferences)
 13. [Named Capturing Groups and Backreferences](#Named-Capturing-Groups-and-Backreferences)
 14. [Relative Backreferences](#Relative-Backreferences)
