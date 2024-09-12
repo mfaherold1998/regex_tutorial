@@ -6,9 +6,9 @@
 3. [Non-printable characters](#non-printable.characters)
 4. [Class Characteres](#class-characteres)
 5. [Shorthands character classes](#shorthands-character-classes)
-6. [Usos y mal usos del .](#mal-usos-.)
-7. [Start and end of a string](#start-end-string)
-8. [Alternation with The Vertical Bar or Pipe Symbol](#alternation)
+6. [Usos y mal usos del .](#usos-y-mal-usos-del-.)
+7. [Start and end of a string](#start-and-end-of-a-string)
+8. [Alternation with The Vertical Bar or Pipe Symbol](#alternation-with-the-vertical-bar-or-pipe-symbol)
 
 ## Introduction
 
