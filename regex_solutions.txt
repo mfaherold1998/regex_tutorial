@@ -16,3 +16,4 @@ https://regex101.com/quiz/1
 14. ^(?=.*(?:http:\/\/|www\.|porn|credit card))(?!.*(?:not allowed|filter|mirc)) /i (hace dos pases por el texto, uno para controlar que las palabras deseadas existen y otro para controlar que las palabras no deseadas no existen)
 15. (?<!\d)\.(?!\s)|(?<=\d)\.(?!\d) (match los puntos que no se encuentran entre digitos)
 16. (?=(\b\w{4,}\b)(?:.*\b\1\b){2})(?!(\b\w{4,}\b)(?:.*\b\1\b){3})/gi (encontrar palabras repetidas al menos 3 veces)
+17. ^(?:(?!end).)*start.* (match todo el texto donde aparezca start pero que end no aparezca antes de start)
