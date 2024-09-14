@@ -28,6 +28,8 @@
 25. [Conditionals if-else](#Conditionals-if-else)
 26. [Balancing groups](#Balancing-groups)
 27. [Recursion](#Recursion)
+28. [Subroutines](#Subroutines)
+29. [Infinite Recursion](#infinite-recursion)
 
 ## Introduction
 
@@ -532,4 +534,111 @@ You can use an atomic group instead of the non-capturing group for improved perf
 
 > Not all the flawors support recursion with alternation outside a gruop. The solution is put all alternations inside one.
 
+## Subroutines
+
+Very similar to recursion
+
+Instead of matching the entire regular expression again, a subroutine call only matches the regular expression inside a capturing group.
+
+If you place a call inside the group that it calls, you’ll have a recursive capturing group.
+
+Perl:
+
+(?1) => to call a numbered group 
+
+(?+1) => to call the next group
+
+(?-1) => to call the preceding group
+
+(?&name) => to call named group
+
+(?+1)(?'name'[abc])(?1)(?-1) => same as [abc](?'name'[abc])[abc][abc][abc]
+
+**PCRE**: (?P<name>[abc])(?1)(?P>name) => (?P<name>[abc])[abc][abc]
+
+> Python no soporta subroutines ni recursion
+
+**Ruby**: \g<+1>(?<name>[abc])\g<1>\g<-1>\g<name> and \g'+1'(?'name'[abc])\g'1'\g'-1'\g'name'
+
+## Matching Balancing constructs
+
+Recursion into a capturing group is a more flexible way of matching balanced constructs than recursion of the whole regex.
+
+\A(b(?:m|(?1))*e)\z is the generic regex for checking that a string consists entirely of a correctly balanced construct.
+
+> Again, b is what begins the construct, m is what can occur in the middle of the construct, and e is what can occur at the end of the construct. For correct results, no two of b, m, and e should be able to match the same text.
+
+You can use an atomic group instead of the non-capturing group for improved performance: \A(b(?>m|(?1))*e)\z.
+
+Similarly, \Ao*(b(?:m|(?1))*eo*)+\z and the optimized \Ao*+(b(?>m|(?1))*+eo*+)++\z match a string that consists of nothing but a sequence of one or more correctly balanced constructs, with possibly other text in between. Here, o is what can occur outside the balanced constructs. It will often be the same as m. o should not be able to match the same text as b or e.
+
+\A(\((?>[^()]|(?1))*\))\z => matches a string that consists of nothing but a correctly balanced pair of parentheses, possibly with text between them
+
+\A[^()]*+(\((?>[^()]|(?1))*+\)[^()]*+)++\z => also allows text before the first opening parenthesis and after the last closing parenthesis in the string.
+
+## Matching the same construct several times
+
+^Name:\ (.*)\r?\n
+Born:\ (?:3[01]|[12][0-9]|[1-9])
+       -(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)
+       -(?:19|20)[0-9][0-9]\r?\n
+Admitted:\ (?:3[01]|[12][0-9]|[1-9])
+           -(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)
+           -(?:19|20)[0-9][0-9]\r?\n
+Released:\ (?:3[01]|[12][0-9]|[1-9])
+           -(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)
+           -(?:19|20)[0-9][0-9]$
+
+=>
+
+^Name:\ (.*)\r?\n
+Born:\ (?'date'(?:3[01]|[12][0-9]|[1-9])
+               -(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)
+               -(?:19|20)[0-9][0-9])\r?\n
+Admitted:\ \g'date'\r?\n
+Released:\ \g'date'$
+
+## Separate subroutine definitions
+
+> This special group tells the regex engine to ignore its contents You can put as many capturing groups inside the DEFINE group as you like. The DEFINE group itself never matches anything, and never fails to match. It is completely ignored.
+
+(?(DEFINE)(?'date'(?:3[01]|[12][0-9]|[1-9])
+                  -(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)
+                  -(?:19|20)[0-9][0-9]))
+^Name:\ (.*)\r?\n
+Born:\ (?P>date)\r?\n
+Admitted:\ (?P>date)\r?\n
+Released:\ (?P>date)$
+
+## Quantifiers On Subroutine Calls
+
+Work just like a quantifier on recursion: The call is repeated as many times in sequence as needed to satisfy the quantifier.
+
+([abc])(?1){3} => matches abcb and any other combination of four-letter combination of the first three letters of the alphabet.
+
+Quantifiers on the group are ignored by the subroutine call. ([abc]){3}(?1) also matches abcb. First, the group matches three times, because it has a quantifier. Then the subroutine call matches once, because it has no quantifier. ([abc]){3}(?1){3} matches six letters, such as abbcab, because now both the group and the call are repeated 3 times.
+
+> Ruby does not support subroutine definition, pero soporta grupos repetidos 0 veces:
+
+(?'date'(?:3[01]|[12][0-9]|[1-9])
+        -(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)
+        -(?:19|20)[0-9][0-9]){0}
+^Name:\ (.*)\r?\n
+Born:\ \g'date'\r?\n
+Admitted:\ \g'date'\r?\n
+Released:\ \g'date'$
+
+## Infinite Recursion
+
+Regular expressions such as (?R)?z or a?(?R)?z or a|(?R)z that use recursion without having anything that must be matched in front of the recursion can result in infinite recursion.
+
+**Circular infinite subroutines calls**
+
+Subroutine calls can also lead to infinite recursion. All flavors handle the potentially infinite recursion in ((?1)?z) or (a?(?1)?z) or (a|(?1)z) in the same way as they handle potentially infinite recursion of the entire regex, as an error.
+
+But subroutine calls that are not recursive by themselves may end up being recursive if the group they call has another subroutine call that calls a parent group of the first subroutine call.
+
+**Endless recursion**
+
+A regex such as a(?R)z that has a recursion token that is not optional and is not have an alternative without the same recursion leads to endless recursion.
 
