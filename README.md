@@ -30,6 +30,8 @@
 27. [Recursion](#Recursion)
 28. [Subroutines](#Subroutines)
 29. [Infinite Recursion](#infinite-recursion)
+30. [Quantifiers On Recursion](#Quantifiers-On-Recursion)
+31. [POSIX Bracket Expressions](#POSIX-Bracket-Expressions)
 
 ## Introduction
 
@@ -641,4 +643,47 @@ But subroutine calls that are not recursive by themselves may end up being recur
 **Endless recursion**
 
 A regex such as a(?R)z that has a recursion token that is not optional and is not have an alternative without the same recursion leads to endless recursion.
+
+## Quantifiers On Recursion
+
+So a{2}(?R)z|q matches aaqz, aaaaqzz, aaaaaaqzzz, and so on. a has to match twice during each recursion.
+
+https://www.regular-expressions.info/recurserepeat.html
+
+## Recursion and capturing
+
+When the regex engine enters recursion, it internally makes a copy of all capturing groups. This does not affect the capturing groups. Backreferences inside the recursion match text captured prior to the recursion unless and until the group they reference captures something during the recursion. After the recursion, all capturing groups are replaced with the internal copy that was made at the start of the recursion. Text captured during the recursion is discarded. This means you cannot use capturing groups to retrieve parts of the text that were matched during recursion.
+
+https://www.regular-expressions.info/recursecapture.html
+
+## Recursion and Backreferences
+
+https://www.regular-expressions.info/recursebackref.html
+
+## Recursion and Backtracking
+
+https://www.regular-expressions.info/recursebacktrack.html
+
+## POSIX Bracket Expressions
+
+POSIX bracket expressions match one character out of a set of characters, just like regular character classes.
+
+One key syntactic difference is that the backslash is NOT a metacharacter in a POSIX bracket expression.
+
+[\d] => matches a \ or a d.
+
+[]\d^-] => matches ], \, d, ^ or -
+
+Only POSIX-compliant regular expression engines have proper and full support for POSIX bracket expressions.
+
+[:digit:] is a POSIX character class, used inside a bracket expression like 
+[x-z[:digit:]]
+
+> The POSIX character class names must be written all lowercase.
+
+table with POSIX values => https://www.regular-expressions.info/posixbrackets.html
+
+[[.ch.]]emie matches chemie. Notice the double square brackets. One pair for the bracket expression, and one pair for the collating sequence.
+
+Character Equivalents:...
 
